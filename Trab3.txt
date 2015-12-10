@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+void sistemaLinear(float **matriz, int linhas, int colunas){
+	int i=0;
+	int j=0;
+	int auxi = 0;
+	float fator = 0;
+	
+	for(i=0;i<linhas;i++){ //para cada linha
+		if(matriz[i][i]!=1){
+			for(j=i;j<colunas;j++){
+				matriz[i][j] = matriz[i][j] / matriz[i][i]; // divide toda a linha para deixar o valor certo com 1
+				
+			}
+			for(auxi=0;auxi<linhas;auxi++){
+				if(i!=auxi){
+					fator = (-1.0) * (matriz[auxi][i] / matriz[i][i]);
+					for(j=i;j<colunas;j++){
+						matriz[auxi][j] = matriz[auxi][j] + matriz[i][i]*fator;
+				
+					}
+				}
+			}
+		}
+	}
+}
+
+
+int main()
+{
+	int m,n, i, j, linha, coluna;
+	float soma;
+	int opcao = 0;
+	int valor = 0;
+	printf("Colocar numero de linhas [espaco] numero de colunas da matriz:\n");
+	scanf("%d %d", &m, &n);
+	
+	//criando a matriz
+	float **matriz=(float**)calloc(m,sizeof(float*));
+	for(i=0; i<m; i++)
+	{
+		matriz[i]=(float*)calloc(n,sizeof(float));
+	}
+	
+	while(opcao!=7){
+		
+		
+		system("cls");
+		printf("Menu: \n");
+		printf("1: Mostrar Matriz\n2: Resetar Matriz\n3: Valor Posicao\n4: Soma dos valores de cada linha\n5: Soma dos valores de cada coluna\n6: Colocar valor na matriz\n7:Sair e Liberar matriz\n8:Sistema Linear\n\nOpcao: ");
+		
+		scanf("%d", &opcao);
+		fflush(stdin);
+		
+		system("cls");
+		
+		switch(opcao){
+			
+			case 1:
+				for(i=0;i<m;i++){
+					for(j=0;j<n;j++){
+						printf("%.1f ",matriz[i][j]);		
+					}
+					printf("\n");
+				}
+				getchar();
+				break;			
+			
+			case 2:
+				for(i=0;i<m;i++){
+					for(j=0;j<n;j++){
+						matriz[i][j] = 0.0;		
+					}
+					printf("\n");
+				}
+				break;
+			
+			case 3:
+				printf("Digite: Numero da linha [espaco] Numero da Coluna\n");
+				scanf("%d %d", &i, &j);
+				fflush(stdin);
+				valor = matriz[i][j];
+				printf("\nValor: %f", valor);
+				getchar();
+				break;
+				
+			case 4:
+				printf("Digite numero da linha:");
+				scanf("%d", &linha);
+				fflush(stdin);
+				soma = 0;
+				for(j=0;j<n;j++){
+					soma = soma+matriz[linha][j];
+				}
+				printf("\nA soma eh: %d", soma);
+				getchar();
+				break;
+		
+			case 5:
+				printf("Digite numero da coluna:");
+				scanf("%d", &coluna);
+				fflush(stdin);
+				soma = 0.0;
+				for(i=0;i<n;i++){
+					soma = soma+matriz[i][coluna];
+				}
+				printf("\nA soma eh: %d", soma);
+				getchar();
+				break;
+				
+			case 6:
+				printf("Digite: Numero da linha [espaco] Numero da Coluna [espaco] Valor a Colocar\n");
+				scanf("%d %d %d", &i, &j, &valor);
+				fflush(stdin);
+				matriz[i-1][j-1] = valor;
+				break;
+				
+			case 7:
+				for(i=0;i<m;i++){
+					free(matriz[i]);
+				}
+				free(matriz);
+				printf("\nAdieu!");
+				getchar();
+				break;
+
+			case 8:
+				sistemaLinear(matriz,m,n);
+				break;
+		
+		
+		}	
+	
+	}
+	return 0;
+}
